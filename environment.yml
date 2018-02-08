@@ -1,14 +1,13 @@
-name: widgets
+name: root
 channels:
   - conda-forge
   - defaults
 dependencies:
   - python=3.6
+  - folium
+  - ipkernel
+  - requests
+  - matplotlib
   - pandas
-  - pendulum
-  - bqplot
-  - erddapy
-  - jupyter
-  - nodejs
   - pip:
-    - git+https://github.com/jasongrout/ipyleaflet.git@markercluster
+    - git+https://github.com/pyoceans/erddapy.git
