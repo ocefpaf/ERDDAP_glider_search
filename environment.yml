@@ -1,0 +1,14 @@
+name: widgets
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.6
+  - pandas
+  - pendulum
+  - bqplot
+  - erddapy
+  - jupyter
+  - nodejs
+  - pip:
+    - git+https://github.com/jasongrout/ipyleaflet.git@markercluster
