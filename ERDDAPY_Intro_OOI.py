@@ -23,6 +23,7 @@
 
 # In[1]:
 
+
 from erddapy import ERDDAP
 
 server = 'https://erddap-uncabled.oceanobservatories.org/uncabled/erddap'
@@ -54,6 +55,7 @@ variables = [
 
 # In[2]:
 
+
 e = ERDDAP(
     server=server,
     dataset_id=dataset_id,
@@ -72,6 +74,7 @@ print(e.get_download_url())
 
 # In[3]:
 
+
 df = e.to_pandas(
     index_col='time',
     parse_dates=True,
@@ -80,6 +83,7 @@ df = e.to_pandas(
 
 
 # In[4]:
+
 
 df.head()
 
@@ -90,6 +94,7 @@ df.head()
 
 # In[5]:
 
+
 from erddapy import ERDDAP
 
 
@@ -98,6 +103,7 @@ e = ERDDAP(server='https://erddap-uncabled.oceanobservatories.org/uncabled/erdda
 
 # In[6]:
 
+
 import pandas as pd
 
 
@@ -105,6 +111,7 @@ df = pd.read_csv(e.get_search_url(response='csv', search_for='all'))
 
 
 # In[7]:
+
 
 'We have {} tabledap, {} griddap, and {} wms endpoints.'.format(
     len(set(df['tabledap'].dropna())),
@@ -118,6 +125,7 @@ df = pd.read_csv(e.get_search_url(response='csv', search_for='all'))
 # Let's narrow the search area, time span, and look for *sea_water_temperature* only.
 
 # In[8]:
+
 
 bbox = [-72.0, -69.0, 38.0, 41.0]
 
@@ -139,6 +147,7 @@ kw = {
 
 # In[9]:
 
+
 search_url = e.get_search_url(response='csv', **kw)
 search = pd.read_csv(search_url)
 gliders = search['Dataset ID'].values
@@ -151,6 +160,7 @@ print(msg(len(gliders), '\n'.join(gliders)))
 
 # In[10]:
 
+
 print(gliders[0])
 
 info_url = e.get_info_url(dataset_id=gliders[0], response='csv')
@@ -160,6 +170,7 @@ info.head()
 
 
 # In[11]:
+
 
 cdm_profile_variables = info.loc[
     info['Attribute Name'] == 'cdm_profile_variables', 'Value'
@@ -172,6 +183,7 @@ print(''.join(cdm_profile_variables))
 
 # In[12]:
 
+
 e.get_var_by_attr(
     dataset_id='CP02PMCI-WFP01-03-CTDPFK000-ctdpf_ckl_wfp_instrument-telemetered-deployment0008-tabledap',
     standard_name='sea_water_temperature'
@@ -181,6 +193,7 @@ e.get_var_by_attr(
 # # Easy to use CF conventions standards
 
 # In[13]:
+
 
 
 t_vars = [
@@ -193,6 +206,7 @@ t_vars
 
 # In[14]:
 
+
 s_vars = [
     e.get_var_by_attr(
         dataset_id=glider, standard_name='sea_water_practical_salinity'
@@ -202,6 +216,7 @@ s_vars
 
 
 # In[15]:
+
 
 d_vars = [
     e.get_var_by_attr(
@@ -213,6 +228,7 @@ d_vars
 
 # In[16]:
 
+
 # FIX: should not really assume that variables are the same for each dataset
 depth = d_vars[0]
 salinity = s_vars[0]
@@ -222,6 +238,7 @@ temperature = t_vars[0]
 # # Putting everything together
 
 # In[17]:
+
 
 from requests.exceptions import HTTPError
 
@@ -257,6 +274,7 @@ for glider in gliders:
 
 # In[18]:
 
+
 import numpy as np
 
 for glider in dfs.keys():
@@ -265,6 +283,7 @@ for glider in dfs.keys():
 
 
 # In[19]:
+
 
 import folium
 
@@ -303,8 +322,9 @@ m
 
 # In[20]:
 
+
 import matplotlib.pyplot as plt
-get_ipython().magic('matplotlib inline')
+get_ipython().run_line_magic('matplotlib', 'inline')
 
 def glider_scatter(df, ax, glider):
     ax.scatter(df[temperature], df[salinity],
@@ -323,10 +343,12 @@ leg = ax.legend()
 
 # In[21]:
 
+
 df = next(iter(dfs.values()))
 
 
 # In[22]:
+
 
 import matplotlib.dates as mdates
 
@@ -341,9 +363,4 @@ ax.xaxis.set_major_formatter(xfmt)
 cbar = fig.colorbar(cs, orientation='vertical', extend='both')
 cbar.ax.set_ylabel('Temperature ($^\circ$C)')
 ax.set_ylabel('Depth (m)');
-
-
-# In[ ]:
-
-
 
