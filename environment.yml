@@ -9,5 +9,4 @@ dependencies:
   - requests
   - matplotlib
   - pandas
-  - pip:
-    - git+https://github.com/pyoceans/erddapy.git
+  - erddapy>=0.1.6
